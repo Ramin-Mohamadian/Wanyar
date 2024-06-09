@@ -1,0 +1,99 @@
+﻿@page "{id}"
+
+@model Wanyar_Web.Pages.Admin.Users.EditeUserModel
+@using Wanyar.DataLayer.Entities.Users
+@{
+    List<Role> roles = ViewData["Roles"] as List<Role>;
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">افزودن کاربر</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<div class="row">
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="editeUserViewModel.UserId" />
+        <input type="hidden" asp-for="editeUserViewModel.AvatarName" />
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    اطلاعات کاربر
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>نام کاربری</label>
+                        <label class="text-success">@Model.editeUserViewModel.UserName</label>
+                    </div>
+                    <div class="form-group">
+                        <label>ایمیل</label>
+                        <input type="email" asp-for="editeUserViewModel.Email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>کلمه عبور</label>
+                        <input type="text" asp-for="editeUserViewModel.Password" class="form-control">
+                        <label class="help-block">در صورت  لزوم  تغییر  پسورد ! پسورد  جدید  را وارد کنید </label>
+                    </div>
+                    <div class="form-group">
+                        <label>انتخاب نقش کاربر</label>
+                        @foreach (var item in roles)
+                        {
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="SelectedRole" value="@item.RoleId" @((Model.editeUserViewModel.UserRoles.Any(r => r==item.RoleId) ? "checked" : "")) />@item.RoleTitle
+                                    
+                                </label>
+                            </div>
+                        }
+
+                    </div>
+                    <input type="submit" value="ذخیره اطلاعات" class="btn btn-success" />
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    تصویر پروفایل
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <img id="imgAvatar" class="thumbnail" src="/UserAvatar/@Model.editeUserViewModel.AvatarName" />
+                    <div class="form-group">
+                        <label>انتخاب تصویر</label>
+                        <input type="file" id="ImgUp" asp-for="editeUserViewModel.UserAvatar">
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts
+    {
+    <script>
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgAvatar').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#ImgUp").change(function () {
+            readURL(this);
+        });
+    </script>
+ }

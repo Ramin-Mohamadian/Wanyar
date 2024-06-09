@@ -1,0 +1,172 @@
+﻿@page "{id}"
+@model Wanyar_Web.Pages.Admin.Courses.EditeCourseModel
+@{
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">ویرایش دوره</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<div class="row">
+
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Course.CreateDate" />
+        <input type="hidden" asp-for="Course.CourseId" />
+        <input type="hidden" asp-for="Course.CourseImageName" />
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    اطلاعات دوره
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>عنوان دوره</label>
+                        <input type="text" asp-for="Course.CourseTitle" class="form-control">
+                    </div>
+                    <span asp-validation-for="Course.CourseTitle"></span>
+
+                    <div class="form-group">
+                        <label> شرح دوره</label>
+                        <textarea class="form-control" rows="10" asp-for="Course.CourseDescription"></textarea>
+                    </div>
+                    <span asp-validation-for="Course.CourseDescription"></span>
+
+
+                    <div class="form-group">
+                        <label>گروه درسی</label>
+                        <select class="form-control" asp-for="Course.GroupId" asp-items="@(ViewData["Groups"] as SelectList)">
+                        </select>
+                    </div>
+                    <span asp-validation-for="Course.CourseGroup"></span>
+
+
+                    <div class="form-group">
+                        <label>زیر گروه </label>
+                        <select class="form-control" asp-for="Course.SubGroup" asp-items="@(ViewData["SubGroups"] as SelectList)">
+                        </select>
+                    </div>
+                    <span asp-validation-for="Course.SubGroup"></span>
+
+
+                    <div class="form-group">
+                        <label> مدرس دوره </label>
+                        <select class="form-control" asp-for="Course.TeacherId" asp-items="@( ViewData["Teachers"] as SelectList)">
+                        </select>
+                    </div>
+                    <span asp-validation-for="Course.TeacherId"></span>
+
+
+                    <div class="form-group">
+                        <label> قیمت دوره </label>
+                        <input type="number"  asp-for="Course.CoursePrice" class="form-control">
+                    </div>
+                    <span asp-validation-for="Course.CoursePrice"></span>
+
+
+                    <div class="form-group">
+                        <label> ویدیو دمو دوره </label>
+                        <input type="file" asp-for="Course.DemoFileName" name="demoUp" class="form-control">
+                    </div>
+                    <span asp-validation-for="Course.DemoFileName"></span>
+
+                    <div class="form-group">
+                        <label> برچسب (Tag) </label>
+                        <input type="text" asp-for="Course.Tags" class="form-control">
+                        <p class="help-block">برچسب ها را با علامت"-"از هم جدا کنید</p>
+                    </div>
+                    <span asp-validation-for="Course.Tags"></span>
+
+
+
+                    <input type="submit" class="btn btn-success" value="ثبت و ذخیره" />
+                </div>
+                <!-- /.panel-body -->
+
+            </div>
+            <!-- /.panel -->
+
+        </div>
+        <!-- /.col-lg-12 -->
+        <div class="col-lg-4">
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        تصویر دوره
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <img id="imgAvatar" class="thumbnail" src="/Course/image/@Model.Course.CourseImageName" />
+                        <div class="form-group">
+                            <label>انتخاب تصویر</label>
+                            <input type="file" id="ImgUp" name="imgCourseUp" asp-for="Course.CourseImageName">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label> سطح دوره </label>
+                            <select class="form-control" asp-for="Course.LevelId" asp-items="@(ViewData["Levels"] as SelectList)">
+                            </select>
+                        </div>
+                        <span asp-validation-for="Course.LevelId"></span>
+
+
+                        <div class="form-group">
+                            <label> وضعیت دوره </label>
+                            <select class="form-control" asp-for="Course.StatusId" asp-items="@(ViewData["Statues"] as SelectList)">
+                            </select>
+                        </div>
+                        <span asp-validation-for="Course.StatusId"></span>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+                <!-- /.panel -->
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </form>
+</div>
+
+
+@section Scripts
+    {
+        <script>
+            $("#Course_GroupId").change(function () {
+                $("#Course_SubGroup").empty();
+                $.getJSON("/home/GetSubGroup/" + $("#Course_GroupId :selected").val(),
+                    function (data) {
+
+                        $.each(data,
+                            function () {
+                                $("#Course_SubGroup").append('<option value=' + this.value + '>' + this.text + '</option>');
+
+                            });
+
+                    });
+
+
+            });
+
+            function readURL(input) {
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#imgAvatar').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#ImgUp").change(function () {
+                readURL(this);
+            });
+        </script>
+}

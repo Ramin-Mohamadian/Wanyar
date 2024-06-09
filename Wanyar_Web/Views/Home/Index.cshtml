@@ -1,0 +1,63 @@
+﻿@model Tuple<List<Wanyar.Core.DTOs.ShowItemCourse>, int>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+
+
+
+
+@section SearchBox
+    {
+    <header>
+        <a href="" class="logo"><img src="/images/wanyar.png"></a>
+        <h1>داستان برنامه نویس شدنت از اینجا  شروع میشه</h1>
+        <h2> آموزش ببینید ، تجربه کسب کنید و وارد  بازار کار شوید </h2>
+        <h3> با کمترین هزینه در سایت وانیار یاد بگیر </h3>
+    </header>
+    <div class="search-form">
+        <form action="/Course" method="get">
+            <input type="text" name="search" placeholder="چی دوست داری یاد بگیری ؟">
+            <button><i class="zmdi zmdi-search"></i></button>
+        </form>
+    </div>
+}
+
+
+<main id="home-page">
+    <div class="container">
+        <section class="terms-items">
+            <header>
+                <h2> آخرین دوره های  وانیار </h2>
+                <a href="/Course"> مشاهده همه دوره ها </a>
+            </header>
+            <div class="row">
+                @foreach (var item in Model.Item1)
+                {
+                    <partial name="_CourseBox" model="item" />
+                }
+            </div>
+        </section>
+
+        <hr>
+
+        <section class="terms-items">
+            <header>
+                <h2> دوره های پرطرفدار وانیار   </h2>
+                <a href="/Course"> مشاهده همه دوره ها </a>
+            </header>
+            <div class="row">
+                @{
+                    List<Wanyar.Core.DTOs.ShowItemCourse> pupolar = ViewBag.PopularCourse as List<Wanyar.Core.DTOs.ShowItemCourse>;
+                }
+                @if(pupolar != null)
+                {
+                    @foreach (var item in pupolar)
+                    {
+                        <partial name="_CourseBox" model="@item" />
+                    }
+                }
+            </div>
+        </section>
+    </div>
+</main>

@@ -1,0 +1,16 @@
+﻿@model Wanyar.DataLayer.Entities.Users.User
+
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">وانیار</a></li>
+            <li class="breadcrumb-item active" aria-current="page">ثبت نام انجام شد</li>
+        </ul>
+    </nav>
+</div>
+
+
+<div class="alert alert-info">
+    <h2>@Model.UserName عزیز ثبت نام شما با موفقیت انجام شد</h2>
+    <p>ایمیلی حاوی لینک فعال سازی به ایمیل '@Model.Email'ارسال شد لطفا جهت فعال سازی حساب خود روی لینک ارسال شده کلیک کنید  </p>
+</div>

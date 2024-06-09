@@ -1,0 +1,87 @@
+﻿@page "{id}"
+@model Wanyar_Web.Pages.Admin.Roles.EditRoleModel
+@using Wanyar.DataLayer.Entities.Permissions;
+@{
+    List<Permission> permissions = ViewData["Permission"] as List<Permission>;
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">ویرایش نقش</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="container">
+
+    <div class="row">
+        <form method="post">
+            <input type="hidden" asp-for="Role.RoleId" />
+            <input type="hidden" asp-for="Role.IsDelete" />
+            <div class="col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        نقش
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>عنوان نقش</label>
+                            <input type="text" asp-for="Role.RoleTitle" class="form-control">
+                        </div>
+                        <input type="submit" value="ذخیره اطلاعات" class="btn btn-success" />
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        دسترسی های نقش
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        @{
+                            List<int> PermissionSelected = ViewData["SelectedPermission"] as List<int>;
+                        }
+                        <ul>
+                            @foreach (var permission in permissions.Where(p => p.ParentID == null))
+                            {
+                                <li>
+                                    <input type="checkbox" name="SelectedPermission" @((PermissionSelected.Any(p => p==permission.PermissionID) ? "checked" : ""))  value="@permission.PermissionID" /> @permission.PermissionTitle
+
+                                    @if (permissions.Any(p => p.ParentID == permission.ParentID))
+                                    {
+                                        <ul>
+                                            @foreach (var sub in permissions.Where(p => p.ParentID == permission.PermissionID))
+                                            {
+                                                <li>
+                                                    <input type="checkbox" name="SelectedPermission" @((PermissionSelected.Any(p => p==sub.PermissionID) ? "checked" : "")) value="@sub.PermissionID" /> @sub.PermissionTitle
+                                                    @if (permissions.Any(p => p.ParentID == sub.ParentID))
+                                                    {
+                                                        <ul>
+
+                                                            @foreach (var sub2 in permissions.Where(p => p.ParentID == sub.PermissionID))
+                                                            {
+                                                                <li>
+                                                                    <input type="checkbox" name="SelectedPermission" @((PermissionSelected.Any(p => p==sub2.PermissionID) ? "checked" : "")) value="@sub2.PermissionID" /> @sub2.PermissionTitle
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
